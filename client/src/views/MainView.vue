@@ -1,11 +1,11 @@
-<template><div>hello</div></template>
+<template><div></div></template>
 <script>
 export default {
-  name: 'header-component',
+  name: "",
   components: {},
   data() {
     return {
-      sampleData: '',
+      sampleData: "",
     };
   },
   setup() {},
