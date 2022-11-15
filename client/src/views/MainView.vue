@@ -4,7 +4,6 @@
     <div>
       <div class="circle" ref="cir" @mousemove="skew"></div>
       <div class="square" ref="squ" @mousemove="skew"></div>
-      <div class="cursor" ref="cur" @mousemove="curs"></div>
     </div>
   </div>
 </template>
@@ -33,38 +32,17 @@ export default {
       this.$refs.cir.style.setProperty("--mouse-y", e.clientY);
       this.$refs.squ.style.setProperty("--mouse-x", e.clientX);
       this.$refs.squ.style.setProperty("--mouse-y", e.clientY);
+      const x = e.pageX - this.$refs.cir.offsetLeft;
+      const y = e.pageY - this.$refs.cir.offsetTop;
+      this.$refs.cir.style.setProperty("--x", x + "px");
+      this.$refs.cir.style.setProperty("--y", y + "px");
       console.log(e.clientY);
-    },
-    curs: function (e) {
-      let x = e.pageX;
-      let y = e.pageY;
-      this.$refs.cur.style.top = y + "px";
-      this.$refs.cur.style.left = x + "px";
     },
   },
 };
 </script>
 
 <style scoped>
-.cursor {
-  z-index: 999;
-  position: fixed;
-  background-color: blue;
-  width: 20px;
-  height: 20px;
-  border-radius: 50px;
-  box-shadow: 0 0 20px blue, 0 0 60px blue, 0 0 100px blue;
-}
-.cursor:before {
-  content: "";
-  position: absolute;
-  background-color: blue;
-  width: 50px;
-  height: 50px;
-  opacity: 0.2;
-  transform: translate(-50%, -30%);
-  border-radius: 50%;
-}
 .circle {
   width: 150px;
   height: 150px;
@@ -76,6 +54,23 @@ export default {
     rotateY(calc((var(--mouse-x) - 70) * 0.1deg));
   transition: transform 0.5 ease;
   animation: animateColor 5s linear infinite;
+}
+.circle::before {
+  --size: 0;
+  content: "";
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 100px;
+  height: 100px;
+  filter: brightness(1.2) contrast(100);
+  opacity: 0.4;
+  background: radial-gradient(circle closest-side, #a3b1f1, transparent);
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease, left 0s, top 0s;
+}
+.circle:hover::before {
+  --size: 200px;
 }
 .square {
   display: flex;
